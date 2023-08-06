@@ -153,8 +153,29 @@ def merge(nums: List[Num], left: int, right: int, mid: int) -> None:
         k+=1
 ```
 
-### Runtime
-- O(n*log(n))
+#### Callstack
+```
+mergesort([7,5,2,1,3]) 
+	mergesort([7,5])				// left 
+		mergesort([7])			// left 
+			return [7] 
+		mergesort([5])			// right 
+			return [5] 
+		return merge([7],[5])		// returns [5, 7] 
+	mergesort([2,1,3])			// right 
+		mergesort([2])			// left 
+			return [2] 
+		mergesort([1,3])			// right 
+			mergesort([1])  		// left	 
+				return [1] 
+			mergesort([3])		// right 
+				return [3] 
+			return merge([1],[3])	// returns [1, 3] 
+		return merge([2], [1,3])		// returns [1,2,3] 
+	return merge([5,7], [1,2,3])		// returns [1,2,3,5,7] 
+```
+### Runtime (Best and Wost Case are the same!)
+- $\Theta$(n*log(n))
     - Optimal runtime for comparison based algorithms
 
 ## [1. Mergesort](https://www.coursera.org/lecture/algorithms-part1/mergesort-ARWDq)
@@ -165,10 +186,84 @@ Steps:
 
 Idea is based on the idea of merging
 
+# Quicksort
 
-# [Sedgewick - Mergesort (5 videos)](https://www.coursera.org/learn/algorithms-part1/home/week/3)
+## [Quicksort in 4 minutes](https://www.youtube.com/watch?v=Hoixgm4-P4M)
+### Recursive algorithm
+- Think pivot
+- A pivot is one of the items in the array that meets the following 3 conditions after we sorted it
+    1. Correct final position in sorted array
+    2. Items to the left are smaller
+    3. Items to the right are larger
+    - Example: `[ 2 6 5 3 8 7 1 0]`
+        - First, move the pivot to the end to get it oput of the way `[2 6 5 0 8 7 1 3]`
+        - Look for first instance of (both) thesetwo items
+            - itemFromLeft: first item starting from the left that is larger than pivot
+            - itemFromRight: first item starting from the right that is less than pivot
+        - `6` is itemFromLeft and `1` is item from right. Swap them
+            - => `[2 1 5 0 8 7 6 3]`
+        - Now, `5` is itemFromLeft and `0` is item from right. Swap them
+            - => `[2 1 0 5 8 7 6 3]`
+        - Now itemFromLeft has a greater index than itemFromRight so we know we are done
+        - Now simply swap itemFromLeft with our pivot
+            - => `[2 1 0 3 8 7 6 5]` and now our pivot is in the right spot! And we now have 2 partitions (everything left of 3 and everything right of 3)
+        - So now we recursively do the same thing on the two partitions
+### How to choose pivot? 
+-The pivot makes a big difference in the performance of the algorithm
+- One popular method is `Median of 3`:
+    - In this method we look at the first middle and last element of the array
+    - we sort them and use the middle element as the pivot
+        - We are making the guess that the middle of these 3 items could be close to the median of the array
+        
+### Time complexity:
+- Worst case: O(n^2)
+    - When does worst case happen?
+- Average case: O(nlog(n))
 
-    - [ ] [2. Bottom up Mergesort](https://www.coursera.org/learn/algorithms-part1/lecture/PWNEl/bottom-up-mergesort)
-    - [ ] [3. Sorting Complexity](https://www.coursera.org/lecture/algorithms-part1/sorting-complexity-xAltF)
-    - [ ] [4. Comparators](https://www.coursera.org/lecture/algorithms-part1/comparators-9FYhS)
-    - [ ] [5. Stability](https://www.coursera.org/learn/algorithms-part1/lecture/pvvLZ/stability)
+#### Best Case
+- If the pivot always lands in the middle, then we end up with 2 subproblems that are roughly half the size of the original problem
+    - If the pivots of those are roughly at the middle, then you end up with 4 subproblems with roughly a quarter of the size of the original problem 
+    - and so on..
+- In this case, the problem breaks down in to a tree of `logn` depth
+- Work done at each level:
+    - Level 0: `n` work
+    - Level 1: `n/2` work each partition so `2 * n/2 ~ n`
+    - Level 3: `n/4' at each partition so `4 * n/4 ~ n`
+    - And so on...
+    - So at each level we have roughly `n` amount of work
+- Therefore best case time complexity is $\Omega$(nlog(n))
+
+#### Worst Case
+Pivot lands always at the beginning of the array
+- This means the first problem is divided into a 2 subproblems where the left is size 1 and the right is n-1
+- At each subsequent level, the problem will be subdivided into 1+d and n-d where d is the depth of the callstack; therefore we will have n subproblems all which take n-d time
+- Worst case is $\Theta$(n^2)
+
+#### Average Case
+Runtime complexity: $\Theta$(nlog(n))
+Proof:
+![Image](static/quicksort_average.png)
+
+##### Despite this Worst Case, quicksort is actually better than mergesort
+
+## [Sorting 2, Video 4 Quicksort Best and Worst Case](https://www.youtube.com/watch?v=PJnHzFypGaI
+)
+
+## [1. Quicksort](https://www.coursera.org/lecture/algorithms-part1/quicksort-vjvnC)
+- Recusrive algorithm 
+- Like mergesort except that it does the recursion after it does the work, whereas mergesort does it before it does the work
+
+Steps:
+1. Shuffle the array
+2. Partition so that for some j:
+    - entry a[j] is in place
+    - No larger entry to the left of j
+    - No smaller entry to the right of j
+3. Sort each piece recursively
+
+
+# [Sedgewick - Quicksort (4 videos)](https://www.coursera.org/learn/algorithms-part1/home/week/3)
+    - [ ] [1. Quicksort](https://www.coursera.org/lecture/algorithms-part1/quicksort-vjvnC)
+    - [ ] [2. Selection](https://www.coursera.org/lecture/algorithms-part1/selection-UQxFT)
+    - [ ] [3. Duplicate Keys](https://www.coursera.org/lecture/algorithms-part1/duplicate-keys-XvjPd)
+    - [ ] [4. System Sorts](https://www.coursera.org/lecture/algorithms-part1/system-sorts-QBNZ7)
