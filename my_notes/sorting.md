@@ -50,8 +50,51 @@ doubled, most likely).
 each element of the array. The sequence number serves as a tie-
 breaker.
 
-# [Sedgewick - Mergesort (5 videos)](https://www.coursera.org/learn/algorithms-part1/home/week/3)
+# Mergesort
+## [Merge Sort In Python Explained (with example and code)](https://www.youtube.com/watch?v=cVZMah9kEjI)
+### Overview
+Divide and conquer algorithm
+    - A problem is divided into subproblems recursively until the problem is very simple to solve
+    - Solutions are combined to solve original problem
+
+### General Principle
+Merge Sort:
+    1. Divide array in two halves
+    2. Recursively sort each half
+    3. Merge two halves
+
+Example:
+- Sort:
+    - `[2, 6, 5, 1, 7, 4, 3]`
+    - `[2, 6, 5, 1] [7, 4, 3]`
+    - `[2, 6, 5, 1] [7, 4, 3]`
+    - `[2, 6] [5, 1] [7, 4] [3]`
+    - `[2] [6] [5] [1] [7] [4] [3]` # sorted
+- Now merge:
+    - `[2] [6]` => `[2, 6]`
+    - `[5] [1]` => `[1, 5]`
+    - `[7] [4]` => `[4, 7]`
+    - `[3]`
+    - `[2, 6] [1, 5]` => `[1, 2, 5, 6]`
+    - `[4, 7] [3]` => `[3, 4, 7]`
+    - `[1, 2, 5, 6] [3, 4, 7]` => `[1, 2, 3, 4, 5, 6, 7]`
+
+
+### Runtime
+- O(n*log(n))
+    - Optimal runtime for comparison based algorithms
+
 ## [1. Mergesort](https://www.coursera.org/lecture/algorithms-part1/mergesort-ARWDq)
+Steps:
+1. Divide array in two halves
+2. Recursively sort each half
+3. Merge two halves
+
+Idea is based on the idea of merging
+
+
+# [Sedgewick - Mergesort (5 videos)](https://www.coursera.org/learn/algorithms-part1/home/week/3)
+
     - [ ] [2. Bottom up Mergesort](https://www.coursera.org/learn/algorithms-part1/lecture/PWNEl/bottom-up-mergesort)
     - [ ] [3. Sorting Complexity](https://www.coursera.org/lecture/algorithms-part1/sorting-complexity-xAltF)
     - [ ] [4. Comparators](https://www.coursera.org/lecture/algorithms-part1/comparators-9FYhS)

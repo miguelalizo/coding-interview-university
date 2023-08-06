@@ -19,3 +19,4 @@ Thumbs.db
 # Sublime Files
 .sublime
 venv
+*__pycache__
