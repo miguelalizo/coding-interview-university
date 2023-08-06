@@ -1,8 +1,9 @@
 from typing import Union, List
+import random
 
 Num = Union[int, float]
 
-def mergesort(nums: List[Num]) -> None:
+def mergesort(nums: List[Num], left: int = 0, right: int = None) -> None:
     """
     Sort a list of numbers in place
 
@@ -14,39 +15,67 @@ def mergesort(nums: List[Num]) -> None:
     -------
     None
     """
-    if len(nums) <=1:
-        return nums
-    if len(nums) > 1:
-        left_nums = nums[:len(nums)//2]
-        right_nums = nums[len(nums)//2:]
+    if right is None:
+        right = len(nums)-1
+
+    if left >= right:
+        return
+    
+    mid = (left+right)//2
 
     # recursion
-    mergesort(left_nums)
-    mergesort(right_nums)
+    mergesort(nums, left, mid)
+    mergesort(nums, mid+1, right)
 
+    merge(nums, left, right, mid)
+    
+def merge(nums: List[Num], left: int, right: int, mid: int) -> None:
+    """
+    Merge two lists in sorted order
+
+    Parameters
+    ----------
+    nums: List[Num]
+        List of numbers to be merged
+    left: int
+        Left bound index of nums
+    right: int
+        Right boudn index of nums
+    mid: int
+        Midpoint index of nums
+
+    Returns
+    -------
+    None
+    """
     # merge
-    i = 0 # left nums index
-    j = 0 # right nums index
-    k = 0 # merged nums idx
-    while i<len(left_nums) and j<len(right_nums):
-        if left_nums[i] <= right_nums[j]:
-            nums[k] = left_nums[i]
-            i+=1
+    l_copy = nums[left:mid+1]
+    r_copy = nums[mid+1:right+1]
+
+    l_counter, r_counter = 0, 0
+    k = left # sorted counter
+
+    while l_counter<len(l_copy) and r_counter<len(r_copy):
+        if l_copy[l_counter] <= r_copy[r_counter]:
+            nums[k] = l_copy[l_counter]
+            l_counter+=1
         else:
-            nums[k] = right_nums[j]
-            j+=1
+            nums[k] = r_copy[r_counter]
+            r_counter+=1
         k+=1
 
-    while i<len(left_nums):
-        nums[k] = left_nums[i]
-        i+=1
+    while l_counter<len(l_copy):
+        nums[k] = l_copy[l_counter]
+        l_counter+=1
         k+=1
-    while j<len(right_nums):
-        nums[k] = right_nums[j]
-        j+=1
+    while r_counter<len(r_copy):
+        nums[k] = r_copy[r_counter]
+        r_counter+=1
         k+=1
 
 if __name__=="__main__":
-    nums_test = [2, 3.1, 3, 5, 1, 7, 4, 4, 4, 2, 6, 0]
+    random.seed("ABC")
+    nums_test = [random.randint(0, 1000) for _ in range(100)]
+    print(nums_test)
     mergesort(nums_test)
     print(nums_test)
