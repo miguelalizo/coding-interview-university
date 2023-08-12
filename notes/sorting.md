@@ -294,6 +294,8 @@ In place Sort
 Inversions:
 - if you start with an already almost sorted array then running time is proportional to the numbher of inversions
 
+For implementation: see `code/insertionsort.py`
+
 ### Selection
 ### Heapsort
 ### Mergesort
