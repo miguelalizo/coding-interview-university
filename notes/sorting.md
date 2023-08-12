@@ -267,3 +267,33 @@ Steps:
     - [ ] [2. Selection](https://www.coursera.org/lecture/algorithms-part1/selection-UQxFT)
     - [ ] [3. Duplicate Keys](https://www.coursera.org/lecture/algorithms-part1/duplicate-keys-XvjPd)
     - [ ] [4. System Sorts](https://www.coursera.org/lecture/algorithms-part1/system-sorts-QBNZ7)
+
+# UC Berkeley Sort Lectures: tAKE NOTES NEXT TIME
+## [CS 61B Lecture 29: Sorting I (video)](https://archive.org/details/ucberkeley_webcast_EiUvYS2DT6I)
+### Insertion Sort
+#### Runs in O(n^2)
+#### Procedure:
+Maintain the invariant that S is sorted
+- start with emopty list S and unsorted list i of N items
+```python
+for x in i:
+    # insert x into S in sorted order
+```
+
+#### Notes:
+Linked lST
+- If S is a linked list, then O(n) worst-case time to find the right position to insert
+Array
+- If S is an array then we can use binary search to find the insertion position which becomes O(logn) to ***find*** the right position to insert **BUT** it doestake O(n) time to shift higher items over after inserting
+
+In place Sort
+- Insertion sort is in place sort if S is an Array
+    - This is done by 'partitioning' the array into S and I in place with indexing
+- Space complexity O(1)
+
+Inversions:
+- if you start with an already almost sorted array then running time is proportional to the numbher of inversions
+
+### Selection
+### Heapsort
+### Mergesort
