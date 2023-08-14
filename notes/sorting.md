@@ -294,8 +294,29 @@ In place Sort
 Inversions:
 - if you start with an already almost sorted array then running time is proportional to the numbher of inversions
 
+Balanced Search Tree:
+- If S is a balanced search tree then running time can become O(nlogn)
+    - This is not used in practiced because there are better sorting algorithms for balanced search trees that run faster (still O(nlogn) but with better coefficients)
+
 For implementation: see `code/insertionsort.py`
 
 ### Selection
+#### Runs in O(n^2) ALWAYS
+#### Procedure:
+Maintain the invariant that S is sorted
+- start with emopty list S and unsorted list i of N items
+```
+for (i=0;i<n;i++){
+    x <- item in I with smallest key
+    remove x from I
+    append x to end of S
+}
+```
+Whether S is array or linked list:
+- $\Theta$(n^2)
+
+In place sort:
+- This algorithm can be done in place
+
 ### Heapsort
 ### Mergesort
