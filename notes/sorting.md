@@ -53,7 +53,7 @@ breaker.
 # Mergesort
 ## [Merge Sort In Python Explained (with example and code)](https://www.youtube.com/watch?v=cVZMah9kEjI)
 ### Overview
-Divide and conquer algorithm
+Recursive Divide and conquer algorithm
     - A problem is divided into subproblems recursively until the problem is very simple to solve
     - Solutions are combined to solve original problem
 
@@ -268,7 +268,7 @@ Steps:
     - [ ] [3. Duplicate Keys](https://www.coursera.org/lecture/algorithms-part1/duplicate-keys-XvjPd)
     - [ ] [4. System Sorts](https://www.coursera.org/lecture/algorithms-part1/system-sorts-QBNZ7)
 
-# UC Berkeley Sort Lectures: tAKE NOTES NEXT TIME
+# UC Berkeley Sort Lectures:
 ## [CS 61B Lecture 29: Sorting I (video)](https://archive.org/details/ucberkeley_webcast_EiUvYS2DT6I)
 ### Insertion Sort
 #### Runs in O(n^2)
@@ -319,4 +319,163 @@ In place sort:
 - This algorithm can be done in place
 
 ### Heapsort
+- Runs in O(nlogn)
+- Can be done in-place
+- It is like selection sort where S is a heap
+- Great for sorting arrays but it is clunky to perform for linkedlists
+    - Best way to use it for linkedlists is by first making an array representation of the linked list and then using heapsort on the array and then making a new linkedlist from the sorted array
+        - In practice, just dont use heapsort on linked lists
+
+Already implemented see `heapsort.py` and [priority queue notes](priority_queues.md)
+
+
 ### Mergesort
+Recursive divide and conquer alrgorithm:
+- Divide first, then sort while merging
+    - "Opposite" order than quicksort
+
+
+Running time:
+- Runs in O(nlogn)
+
+Already implemented see `mergesort.py`
+
+Idea:
+- Merge 2 sorted lists into one sorted list in linear time
+
+Linked Lists:
+- Natural for sorting linked lists
+
+Arrays:
+- Not great because it is not an in-place sort and so it requires linear (extra) space to solve
+
+## [CS 61B Lecture 30: Sorting II (video)](https://archive.org/details/ucberkeley_webcast_2hTY3t80Qsk)
+
+### Quicksort - Fastest comparison based sort for arrays
+Recursive divide and conquer algorithm:
+- Do all the work before dividing, then merge is just concatenating two lists together
+    - "Opposite" order than mergesort
+
+Running time:
+- Best and Worst case - $\Theta$(n^2)
+- In practice, it virtually always happens in O(nlogn)
+    - With a smaller constant hidden in the bigO notation than mergesort
+
+- **Fastest known comparison based sort for arrays!**
+    - Because constant factor in the O(nlogn)
+
+Idea:
+- We are given an unsorted list of items to sort
+- We will pick one item from the array and call it the `pivot`
+- We will put all the items less than the pivot on the left side of the array and put all items greater than the pivot on the right side of the array
+- Then we sort those two stacks recursively
+- Then we glue them both together with the pivot in the middle
+
+#### Algorithm
+1. Partition:
+- Start with list I of n items
+- Choose pivot item v from I
+- Partition I into 2 unsorted lists I1 and I2
+    - I1: All keys smaller than pivot's key
+    - I2: All keys larger than the pivot's key
+    - Items w/ same key as pivot can go into either list
+        - Which side differs depending on the implementation
+    - The pivot does not go into either list
+2. 
+Sort I1 recursively, yielding sorted list S1
+Sort I2 recursively, yielding sorted list S2
+3. Concatenate I1 and I2 with v in the middle
+
+Example:`[4,7,1,5,9,3,0]`
+Simple pivot rule for this example: Say pivot is always the first item in the list, we will start with 4
+- Any items less than 4 will go on the L1 `[1,3,0]`; L2 becomes `[7,5,9]` with the pivot in between
+Here is what the callstack looks like:
+```
+   [4,7,1,5,9,3,0]
+[1,3,0]  [4]  [7,5,9]
+[0][1][3]    [5][7][9]
+    [0,1,3,4,5,7,9]
+```
+Lets try to use this version of this sort to sort a sorted array
+```
+   [0,1,3,4,5,7,9]
+   [0][1,3,4,5,7,9]
+   [0][1][3,4,5,7,9]
+   [0][1][3][4,5,7,9]
+   [0][1][3][4][5,7,9]
+   [0][1][3][4][5][7,9]
+   [0][1][3][4][5][7][9]
+   [0,1,3,4,5,7,9]
+```
+
+Point here being:
+- If you choose your pivots well then you may have O(logn) levels in the revcursion tree where at each level you do n work and end up with O(nlogn) running time
+- If you choose pivots incorrectly, then you can get worst case O(n^2) 
+    - Worst case: sorted set and choosing first item as pivot
+
+#### Choosing a Pivot Strategies
+1. Randomly select an item from I as pivot.
+- On average, 1/4, 3/4 split between I1 and LI2 which results in O(nlogn)
+2. Median of 3 strategy
+- Choose 3 random pivots and figure out which one of those 3 is the median of those 3 and choose that as the pivot
+- In practice this only pays off if you have a lot of items in the list
+- Even better probability of O(nlogn)
+
+#### Quicksort on Linked Lists
+When you have items that with equal keys, the answer to which side (I1 or I2) you put it in is different for Arrays than for linked lists.
+
+Suppose we put all items with same key as v (pivot) into the first I1:
+```
+[5,5,5,5,5,5]
+[5,5,5,5,5][5][]
+```
+This becomes quadratic!
+
+Better strategy:
+1. Partition I into 3 lists I1, I2, Iv
+    - Iv contains pivot and all items with the same key
+2. Sort I1 and I2, (dont sort Iv)
+3. Concat S1, Iv and S2
+- Example:
+    ```
+    [5, 7, 5, 0, 6, 5, 5] suppose we choose 5 as pivot
+    [0] [5,5,5,5] [7,6]
+    [0] [5,5,5,5] [6][7][]
+    [0,5,5,5,5,6,7]
+    ```
+- This approach does not work well for arrays because if you want to sort in place, then where do you put the Iv elements? Gets messy!
+
+#### Quicksort on Arrays - This is where quicksort shines!
+In-Place quicksort is fast
+- However a fast in place quicksort that is always fast is tricky
+
+Algorithm:
+- array a
+- Sort items from a[low]...a[high]
+    - We choose pivot v; swapt it wit last item in subarray array to get it out of the way
+    ```
+    [...3,8,0,9,5,7,4...] (choosing 5 as pivot)
+      LOW       v   HIGH
+    [3,8,0,9,4,7,5]
+     i           j
+    i <- low-1
+    j <- high
+    Invariants:
+    - All items left of index i have a key <= pivot
+    - All items to the right of index j have a key >=pivot
+    Advance i until you find a key>=pivot
+    Decrement j until you find a key<=pivot
+    [3,8,0,9,4,7,5]
+    i=8 and i=4
+    swap i and j 
+    [3,4,0,9,8,7,5]
+    repeat this until i>=j
+    Then swap pivot back to middle (take whatever key is at i and swap with pivot which is last thing in array)
+    [3,4,0,5,8,7,9]
+    ```
+- Items with same key as pivot?
+    - With this rule used above we stop at these and swap them (relating to part of algorithm that says "Advance i until you find a key>=pivot" and "Decrement j until you find a key<=pivot) but why?
+        - If we didnt swap them (say by changing to Advance i until you find a key>pivot) then if we have an array where all elements are the same we get n^2 running 
+            - i pointer will advance all the way to the end of the list and j never advances which will put all the values into the left
+        - Instead if we keep incrementing i and decrementing j and keep swapping every time then we will partition the array in the middle into two halves
+

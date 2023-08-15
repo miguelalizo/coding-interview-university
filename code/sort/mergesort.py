@@ -5,7 +5,9 @@ Num = Union[int, float]
 
 def mergesort(nums: List[Num], left: int = 0, right: int = None) -> None:
     """
-    Sort a list of numbers in place
+    Sort a list of numbers not in place
+    Runs in: O(nlogn)
+    Space: O(n)
 
     Parameters
     ----------
